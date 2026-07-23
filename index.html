@@ -111,12 +111,19 @@
 
         
       function startLearning() {
+
     alert("startLearning 被執行");
 
-    // 確認單字庫有成功載入
+    alert(typeof window.wordDatabase);
+
+    alert(Array.isArray(window.wordDatabase));
+
     if (!window.wordDatabase) {
+
         alert("單字庫沒有載入成功！");
+
         return;
+
     }
 
     dailyWords = getRandomWords(window.wordDatabase, 5);
