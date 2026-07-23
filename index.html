@@ -97,7 +97,7 @@
     </div>
 
     <!-- ★ 重點在這裡：我們把單字庫檔案載入進來 ★ -->
-    <script src="words_a.js"></script>
+    <script src="words_A.js"></script>
 
     <script>
         let dailyWords = [];
@@ -110,7 +110,7 @@
         }
 
         function startLearning() {
-            // 現在它會去讀取 words_a.js 裡面的 wordDatabase
+            // 現在它會去讀取 words_A.js 裡面的 wordDatabase
             dailyWords = getRandomWords(wordDatabase, 5);
             currentIndex = 0;
             document.getElementById('welcome-screen').classList.add('hide');
