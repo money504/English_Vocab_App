@@ -1,5 +1,5 @@
 // 國中基礎單字庫：字母 A 與 B (共約 160 字)
-const wordDatabase = [
+window.wordDatabase = [
     // --- 字母 A ---
     { word: "able", pos: "adj.", zh: "有能力的", en_eg: "I am able to finish the work on time.", zh_eg: "我有能力準時完成這項工作。" },
     { word: "about", pos: "prep.", zh: "關於", en_eg: "He told me a story about a brave dog.", zh_eg: "他告訴我一個關於勇敢狗狗的故事。" },
