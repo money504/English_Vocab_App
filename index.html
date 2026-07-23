@@ -109,14 +109,23 @@
             return shuffled.slice(0, count);
         }
 
-        function startLearning() {
-            // 現在它會去讀取 words_A.js 裡面的 wordDatabase
-            dailyWords = getRandomWords(wordDatabase, 5);
-            currentIndex = 0;
-            document.getElementById('welcome-screen').classList.add('hide');
-            document.getElementById('learning-screen').classList.remove('hide');
-            updateCard();
-        }
+        
+       function startLearning() {
+
+    // 確認單字庫有成功載入
+    if (!window.wordDatabase) {
+        alert("單字庫沒有載入成功！");
+        return;
+    }
+
+    dailyWords = getRandomWords(window.wordDatabase, 5);
+    currentIndex = 0;
+
+    document.getElementById('welcome-screen').classList.add('hide');
+    document.getElementById('learning-screen').classList.remove('hide');
+
+    updateCard();
+}
 
         function updateCard() {
             const current = dailyWords[currentIndex];
