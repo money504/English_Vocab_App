@@ -1,5 +1,5 @@
 // 根據你的課本 Unit 1 ~ Unit 5 字彙掃描站建立的完整單字與片語庫
-const wordDatabase = [
+window.wordDatabase = [
     // --- Unit 1: How Was the Weather in Australia? ---
     { word: "summer vacation", pos: "片", zh: "暑假", en_eg: "I went to Japan during my summer vacation.", zh_eg: "我在暑假去了日本。" },
     { word: "weather", pos: "n.", zh: "天氣", en_eg: "The weather today is very nice.", zh_eg: "今天的天氣非常好。" },
