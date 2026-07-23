@@ -207,4 +207,4 @@ window.wordDatabase = [
     { word: "right", pos: "adj.", zh: "右邊 (的)", en_eg: "Turn right at the corner.", zh_eg: "在轉角右轉。" },
     { word: "fly", pos: "v.", zh: "飛行；駕駛", en_eg: "Birds can fly high in the sky.", zh_eg: "鳥兒可以在天空中高飛。" }
 ];
-
+console.log("wordDatabase loaded", window.wordDatabase.length);
