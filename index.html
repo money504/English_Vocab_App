@@ -188,8 +188,11 @@
 
 }
     if (synth.speaking) synth.cancel();
+    function speakCurrentWord() {
 
     const voices = speechSynthesis.getVoices();
+
+    ...
 
     const bestVoice =
         voices.find(v => v.name === "Samantha") ||
