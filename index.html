@@ -185,7 +185,13 @@
 
     speechSynthesis.speak(u);
 }
- function speakCurrentWord() {
+ unction speakCurrentWord() {
+
+    const current = dailyWords[currentIndex];
+
+    ...
+
+}
     if (synth.speaking) synth.cancel();
 
     const voices = speechSynthesis.getVoices();
