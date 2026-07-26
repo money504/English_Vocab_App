@@ -173,18 +173,7 @@
             speakCurrentWord();
         }
 
- function testVoice() {
-    const current = dailyWords[currentIndex];
-
-    const voice = speechSynthesis.getVoices().find(v => v.name === "Samantha");
-
-    const u = new SpeechSynthesisUtterance(current.word);
-    u.voice = voice;
-    u.lang = "en-US";
-    u.rate = 0.7;
-
-    speechSynthesis.speak(u);
-}
+ 
 
     if (synth.speaking) synth.cancel();
     function speakCurrentWord() {
