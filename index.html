@@ -117,104 +117,90 @@
     <script src="words_8A.js"></script>
 
     <script>
-        let dailyWords = [];
-        let currentIndex = 0;
-        const synth = window.speechSynthesis;
+let dailyWords=[];
+let currentIndex=0;
+const synth=window.speechSynthesis;
 
-        function getRandomWords(db, count) {
-            const shuffled = [...db].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
-        }
+function getRandomWords(db,count){
+  const shuffled=[...db].sort(()=>0.5-Math.random());
+  return shuffled.slice(0,count);
+}
 
-        
-      function startLearning() {
+function startLearning(){
+  if(!window.wordDatabase){
+    alert("單字庫沒有載入成功！");
+    return;
+  }
+  dailyWords=getRandomWords(window.wordDatabase,5);
+  currentIndex=0;
+  document.getElementById("welcome-screen").classList.add("hide");
+  document.getElementById("learning-screen").classList.remove("hide");
+  updateCard();
+}
 
-    if (!window.wordDatabase) {
+function updateCard(){
+  const current=dailyWords[currentIndex];
+  document.getElementById("word-title").textContent=current.word;
+  document.getElementById("word-pos").textContent=current.pos;
+  document.getElementById("word-zh").textContent=current.zh;
+  document.getElementById("word-en-eg").textContent=current.en_eg;
+  document.getElementById("word-zh-eg").textContent=current.zh_eg;
+  document.getElementById("progress-text").textContent=`${currentIndex+1} / ${dailyWords.length}`;
+  document.getElementById("progress-bar").style.width=`${((currentIndex+1)/dailyWords.length)*100}%`;
+  document.getElementById("prev-btn").disabled=currentIndex===0;
 
-        alert("單字庫沒有載入成功！");
+  const nextBtn=document.getElementById("next-btn");
+  if(currentIndex===dailyWords.length-1){
+    nextBtn.innerHTML='完成今日任務 <i class="fas fa-check-circle ml-1"></i>';
+    nextBtn.className=nextBtn.className.replace("bg-gray-800","bg-green-500").replace("hover:bg-gray-900","hover:bg-green-600");
+  }else{
+    nextBtn.innerHTML='唸好了，下一個 <i class="fas fa-arrow-right ml-1"></i>';
+    nextBtn.className=nextBtn.className.replace("bg-green-500","bg-gray-800").replace("hover:bg-green-600","hover:bg-gray-900");
+  }
+  speakCurrentWord();
+}
 
-        return;
+function speakCurrentWord(){
+  const current=dailyWords[currentIndex];
+  synth.cancel();
+  const voice=speechSynthesis.getVoices().find(v=>v.name==="Samantha")||
+              speechSynthesis.getVoices().find(v=>v.lang==="en-US");
 
-    }
+  const word=new SpeechSynthesisUtterance(current.word);
+  word.lang="en-US";
+  word.rate=0.7;
+  if(voice) word.voice=voice;
 
-    dailyWords = getRandomWords(window.wordDatabase, 5);
-    currentIndex = 0;
+  const sentence=new SpeechSynthesisUtterance(current.en_eg);
+  sentence.lang="en-US";
+  sentence.rate=0.5;
+  if(voice) sentence.voice=voice;
 
-    document.getElementById('welcome-screen').classList.add('hide');
-    document.getElementById('learning-screen').classList.remove('hide');
+  word.onend=()=>setTimeout(()=>synth.speak(sentence),500);
+  synth.speak(word);
+}
 
+function nextWord(){
+  if(currentIndex<dailyWords.length-1){
+    currentIndex++;
     updateCard();
+  }else{
+    synth.cancel();
+    document.getElementById("learning-screen").classList.add("hide");
+    document.getElementById("finish-screen").classList.remove("hide");
+  }
 }
-
-        function updateCard() {
-            const current = dailyWords[currentIndex];
-            document.getElementById('word-title').textContent = current.word;
-            document.getElementById('word-pos').textContent = current.pos;
-            document.getElementById('word-zh').textContent = current.zh;
-            document.getElementById('word-en-eg').textContent = current.en_eg;
-            document.getElementById('word-zh-eg').textContent = current.zh_eg;
-            
-            document.getElementById('progress-text').textContent = `${currentIndex + 1} / ${dailyWords.length}`;
-            document.getElementById('progress-bar').style.width = `${((currentIndex + 1) / dailyWords.length) * 100}%`;
-            
-            document.getElementById('prev-btn').disabled = currentIndex === 0;
-            
-            const nextBtn = document.getElementById('next-btn');
-            if (currentIndex === dailyWords.length - 1) {
-                nextBtn.innerHTML = '完成今日任務 <i class="fas fa-check-circle ml-1"></i>';
-                nextBtn.classList.replace('bg-gray-800', 'bg-green-500');
-                nextBtn.classList.replace('hover:bg-gray-900', 'hover:bg-green-600');
-            } else {
-                nextBtn.innerHTML = '唸好了，下一個 <i class="fas fa-arrow-right ml-1"></i>';
-                nextBtn.classList.replace('bg-green-500', 'bg-gray-800');
-                nextBtn.classList.replace('hover:bg-green-600', 'hover:bg-gray-900');
-            }
-
-            speakCurrentWord();
-        }
-
- function speakCurrentWord() {
-    const current = dailyWords[currentIndex];
-
-    if (synth.speaking) synth.cancel();
-
-    const voices = speechSynthesis.getVoices();
-    const bestVoice =
-        voices.find(v => v.name === "Samantha") ||
-        voices.find(v => v.name === "Google US English") ||
-        voices.find(v => v.name === "Daniel") ||
-        voices.find(v => v.lang === "en-US");
-
-    const utterWord = new SpeechSynthesisUtterance(current.word);
-    utterWord.lang = "en-US";
-    utterWord.rate = 0.7;
-    if (bestVoice) utterWord.voice = bestVoice;
-
-    const utterSentence = new SpeechSynthesisUtterance(current.en_eg);
-    utterSentence.lang = "en-US";
-    utterSentence.rate = 0.5;
-    if (bestVoice) utterSentence.voice = bestVoice;
-
-    utterWord.onend = () => {
-        setTimeout(() => synth.speak(utterSentence), 500);
-    };
-
-    synth.speak(utterWord);
+function prevWord(){
+  if(currentIndex>0){
+    currentIndex--;
+    updateCard();
+  }
 }
-
-function nextWord() {
-
-        function nextWord() {
-            if (currentIndex < dailyWords.length - 1) { currentIndex++; updateCard(); } 
-            else { 
-                synth.cancel();
-                document.getElementById('learning-screen').classList.add('hide'); 
-                document.getElementById('finish-screen').classList.remove('hide'); 
-            }
-        }
-        function prevWord() { if (currentIndex > 0) { currentIndex--; updateCard(); } }
-        function endLearning() { synth.cancel(); location.reload(); }
-    </script>
+function endLearning(){
+  synth.cancel();
+  location.reload();
+}
+</script>
 </body>
 </html>
 
