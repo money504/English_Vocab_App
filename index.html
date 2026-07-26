@@ -182,6 +182,10 @@
             utterWord.lang = 'en-US';
             utterWord.rate = 0.7; 
             
+            const voice = speechSynthesis.getVoices().find(v => v.name === "Samantha");
+if (voice) {
+    utterWord.voice = voice;
+}
             const utterSentence = new SpeechSynthesisUtterance(current.en_eg);
             utterSentence.lang = 'en-US';
             utterSentence.rate = 0.5;
