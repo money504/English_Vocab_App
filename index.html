@@ -173,22 +173,32 @@
             speakCurrentWord();
         }
 
-        function speakCurrentWord() {
+      function speakCurrentWord() {
     if (synth.speaking) synth.cancel();
 
     const current = dailyWords[currentIndex];
 
     const voice = speechSynthesis.getVoices().find(v => v.name === "Samantha");
 
-    const utter = new SpeechSynthesisUtterance(current.word);
-    utter.voice = voice;
-    utter.lang = "en-US";
-    utter.rate = 0.7;
+    // 單字
+    const utterWord = new SpeechSynthesisUtterance(current.word);
+    utterWord.lang = "en-US";
+    utterWord.rate = 0.7;
+    if (voice) utterWord.voice = voice;
 
-    console.log(voice);
-    console.log(utter.voice);
+    // 例句
+    const utterSentence = new SpeechSynthesisUtterance(current.en_eg);
+    utterSentence.lang = "en-US";
+    utterSentence.rate = 0.5;
+    if (voice) utterSentence.voice = voice;
 
-    synth.speak(utter);
+    utterWord.onend = () => {
+        setTimeout(() => {
+            synth.speak(utterSentence);
+        }, 800);
+    };
+
+    synth.speak(utterWord);
 }
 
         function nextWord() {
