@@ -174,22 +174,24 @@
         }
 
         function speakCurrentWord() {
-    if (synth.speaking) synth.cancel();
+            if (synth.speaking) synth.cancel();
+            
+            const current = dailyWords[currentIndex];
+            
+            const utterWord = new SpeechSynthesisUtterance(current.word);
+            utterWord.lang = 'en-US';
+            utterWord.rate = 0.7; 
+            
+            const utterSentence = new SpeechSynthesisUtterance(current.en_eg);
+            utterSentence.lang = 'en-US';
+            utterSentence.rate = 0.5;
 
-    const current = dailyWords[currentIndex];
-
-    const voice = speechSynthesis.getVoices().find(v => v.name === "Samantha");
-
-    const utter = new SpeechSynthesisUtterance(current.word);
-    utter.voice = voice;
-    utter.lang = "en-US";
-    utter.rate = 0.7;
-
-    console.log(voice);
-    console.log(utter.voice);
-
-    synth.speak(utter);
-}
+            synth.speak(utterWord);
+            
+            utterWord.onend = () => {
+                setTimeout(() => { synth.speak(utterSentence); }, 800);
+            };
+        }
 
         function nextWord() {
             if (currentIndex < dailyWords.length - 1) { currentIndex++; updateCard(); } 
