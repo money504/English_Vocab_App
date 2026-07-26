@@ -173,21 +173,43 @@
             speakCurrentWord();
         }
 
-        function speakCurrentWord() {
-            if (synth.speaking) synth.cancel();
-            
-            const current = dailyWords[currentIndex];
-            
-            const utterWord = new SpeechSynthesisUtterance(current.word);
-            utterWord.lang = 'en-US';
-            utterWord.rate = 0.7; 
-            
-            const utterSentence = new SpeechSynthesisUtterance(current.en_eg);
-            utterSentence.lang = 'en-US';
-            utterSentence.rate = 0.5;
+ function testVoice() {
+    const voice = speechSynthesis.getVoices().find(v => v.name === "Samantha");
 
-            synth.speak(utterWord);
-            
+    const u = new SpeechSynthesisUtterance(current.word);
+    u.voice = voice;
+    u.lang = "en-US";
+    u.rate = 0.7;
+
+    speechSynthesis.speak(u);
+}
+ function speakCurrentWord() {
+    if (synth.speaking) synth.cancel();
+
+    const voices = speechSynthesis.getVoices();
+
+    const bestVoice =
+        voices.find(v => v.name === "Samantha") ||
+        voices.find(v => v.name === "Google US English") ||
+        voices.find(v => v.name === "Daniel") ||
+        voices.find(v => v.lang === "en-US");
+
+    const utterWord = new SpeechSynthesisUtterance(current.word);
+    utterWord.lang = 'en-US';
+    utterWord.rate = 0.7;
+    if (bestVoice) utterWord.voice = bestVoice;
+
+    const utterSentence = new SpeechSynthesisUtterance(current.en_eg);
+    utterSentence.lang = 'en-US';
+    utterSentence.rate = 0.5;
+    if (bestVoice) utterSentence.voice = bestVoice;
+
+    utterWord.onend = () => {
+        synth.speak(utterSentence);
+    };
+
+    synth.speak(utterWord);
+}
             utterWord.onend = () => {
                 setTimeout(() => { synth.speak(utterSentence); }, 800);
             };
