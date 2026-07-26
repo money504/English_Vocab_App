@@ -173,11 +173,16 @@
             speakCurrentWord();
         }
 
-      function speakCurrentWord() {
+            function speakCurrentWord() {
     if (synth.speaking) synth.cancel();
 
     const current = dailyWords[currentIndex];
-    const voice = speechSynthesis.getVoices().find(v => v.name === "Samantha");
+    
+    // 智慧跨平台語音選擇器：優先找高質感英語，其次找美式英語
+    const voices = speechSynthesis.getVoices();
+    const voice = voices.find(v => v.name === "Samantha" || v.name.includes("Natural") || v.name.includes("Google US English")) 
+               || voices.find(v => v.lang === "en-US") 
+               || voices[0];
 
     // 播放單字
     const utterWord = new SpeechSynthesisUtterance(current.word);
@@ -198,6 +203,7 @@
 
     synth.speak(utterWord);
 }
+
 
         function nextWord() {
             if (currentIndex < dailyWords.length - 1) { currentIndex++; updateCard(); } 
